@@ -13,3 +13,6 @@
   private_data_subnet_az1_cidr = "10.0.6.0/24"
   private_data_subnet_az2_cidr = "10.0.7.0/24"
   private_data_subnet_az3_cidr = "10.0.8.0/24"
+
+  ami = "ami-0aa7d40eeae50c9a9"
+  instance_type = "t2.micro"
