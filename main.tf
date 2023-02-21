@@ -66,21 +66,51 @@ module "application_load_balancer" {
   public_subnet_az2_id = module.VPC.public_subnet_az2_id
   public_subnet_az3_id = module.VPC.public_subnet_az3_id
 
-  public_instance_az1_id = module.EC2.public_instance_az1_id
-  public_instance_az2_id = module.EC2.public_instance_az2_id
-  public_instance_az3_id = module.EC2.public_instance_az3_id
+  private_instance_az1_id = module.EC2.private_instance_az1_id
+  private_instance_az2_id = module.EC2.private_instance_az2_id
+  private_instance_az3_id = module.EC2.private_instance_az3_id
 }
 
-#create target ec2 instance
+
+#create instance access key
+module "Key" {
+  source = "../Project Modules/Key"
+
+  key-algorithm = var.key-algorithm
+  key_name = var.key_name
+  privatekey-filename = var.privatekey-filename
+}
+
+
+#create bastion jump host
+module "Bastion-Jump-Host" {
+  source = "../Project Modules/Bastion-Jump-Host"
+  ami = var.ami
+
+  instance_type = var.instance_type
+
+  key_name = var.key_name
+
+  bastian_host_security_group_id = module.security_groups.bastian_host_security_group_id
+
+  public_subnet_az1_id = module.VPC.public_subnet_az1_id
+  public_subnet_az2_id = module.VPC.public_subnet_az2_id
+  public_subnet_az3_id = module.VPC.public_subnet_az3_id
+}
+
+
+#create target private ec2 instance 
 module "EC2" {
   source = "../Project Modules/EC2"
   ami = var.ami
 
   instance_type = var.instance_type
 
-  public_subnet_security_group_id = module.security_groups.public_subnet_security_group_id
+  key_name = var.key_name
 
-  public_subnet_az1_id = module.VPC.public_subnet_az1_id
-  public_subnet_az2_id = module.VPC.public_subnet_az2_id
-  public_subnet_az3_id = module.VPC.public_subnet_az3_id
+  private_subnet_security_group_id = module.security_groups.private_subnet_security_group_id
+
+  private_app_subnet_az1_id = module.VPC.private_app_subnet_az1_id
+  private_app_subnet_az2_id = module.VPC.private_app_subnet_az2_id
+  private_app_subnet_az3_id = module.VPC.private_app_subnet_az3_id
 }

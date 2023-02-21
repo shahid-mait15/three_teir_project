@@ -14,5 +14,9 @@
   private_data_subnet_az2_cidr = "10.0.7.0/24"
   private_data_subnet_az3_cidr = "10.0.8.0/24"
 
+  key-algorithm = "RSA"
+  key_name = "GXI-key"
+  privatekey-filename = "GXI-key.pem" #key name for local system storage of private key
+
   ami = "ami-0aa7d40eeae50c9a9"
   instance_type = "t2.micro"
